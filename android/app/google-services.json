@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "953787862084",
+    "project_id": "gdsc-dms",
+    "storage_bucket": "gdsc-dms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953787862084:android:d6845e25d2bdd44f5e4011",
+        "android_client_info": {
+          "package_name": "com.gdsc.dms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953787862084-7lcs8spd4ovtdlu3e147cg8e515ls0hi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP2aU8YzGtgK7P4wJ5c-M7h1mI9Y9F7-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953787862084-7lcs8spd4ovtdlu3e147cg8e515ls0hi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
