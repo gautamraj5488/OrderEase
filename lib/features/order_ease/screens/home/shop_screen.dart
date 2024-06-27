@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'menu_screen/menu_screen.dart';
 import 'models/shop_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ShopScreen extends StatelessWidget {
   final List<Shop> shops;
@@ -21,10 +22,44 @@ class ShopScreen extends StatelessWidget {
   }
 }
 
-class ShopWidget extends StatelessWidget {
+class ShopWidget extends StatefulWidget {
   final Shop shop;
 
   ShopWidget({required this.shop});
+
+  @override
+  _ShopWidgetState createState() => _ShopWidgetState();
+}
+
+class _ShopWidgetState extends State<ShopWidget> {
+  double averageRating = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAverageRating();
+  }
+
+  Future<void> _fetchAverageRating() async {
+    try {
+      QuerySnapshot ratingsSnapshot = await FirebaseFirestore.instance
+          .collection('feedback')
+          .where('shopId', isEqualTo: widget.shop.shopId)
+          .get();
+
+      if (ratingsSnapshot.docs.isNotEmpty) {
+        List<double> ratings = ratingsSnapshot.docs.map((doc) => doc['rating'] as double).toList();
+        double sum = ratings.fold(0, (previousValue, element) => previousValue + element);
+        setState(() {
+          averageRating = sum / ratings.length;
+        });
+      } else {
+        print('No ratings found for shop ${widget.shop.shopId}');
+      }
+    } catch (error) {
+      print('Error fetching ratings: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +69,7 @@ class ShopWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MenuScreen(shop: shop),
+            builder: (context) => MenuScreen(shop: widget.shop),
           ),
         );
       },
@@ -48,10 +83,10 @@ class ShopWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BuildPhotoWidget(imageUrl: shop.imageUrl),
+              BuildPhotoWidget(imageUrl: widget.shop.imageUrl),
               SizedBox(height: 10),
               Text(
-                shop.shopName,
+                widget.shop.shopName,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -64,7 +99,7 @@ class ShopWidget extends StatelessWidget {
                   Icon(Icons.star, color: Colors.amber),
                   SizedBox(width: 5),
                   Text(
-                    shop.ratings.toString(),
+                    averageRating.toStringAsFixed(1), // Display average rating with one decimal place
                     style: TextStyle(
                       fontSize: 16,
                       color: dark ? Colors.white70 : Colors.black87,

@@ -79,7 +79,8 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           coupons.isEmpty
@@ -97,7 +98,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     child: Column(
                       children: [
                         Image.asset(
-                          "assets/light.png",
+                          "assets/gifs/coupon.gif",
                           fit: BoxFit.cover,
                           height: 150,
                           width: double.infinity,
@@ -136,10 +137,9 @@ class _MenuScreenState extends State<MenuScreen> {
           _buildSearchBar(), // Method to build search bar
           SizedBox(height: 10), // Adjust spacing between search bar and category tabs
           _buildCategoryTabs(), // Method to build category selection tabs/buttons
-          Expanded(
-            child: _buildMenuList(), // Method to build the list of menu items based on selected category and search query
-          ),
+          _buildMenuList()
         ],
+      ),
       ),
     );
   }
@@ -283,6 +283,8 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
           )
               : ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             itemCount: filteredItems.length,
             itemBuilder: (context, index) {
               return MenuItemWidget(menuItem: filteredItems[index], userId: _auth.currentUser!.uid);
