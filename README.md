@@ -77,10 +77,6 @@ OrderEase relies on several dependencies to function properly:
 
 *   **firebase\_auth**: Firebase plugin for Flutter, providing authentication support.
 
-*   **provider**: State management library for Flutter applications.
-
-*   **fluttertoast**: Flutter plugin for displaying toast notifications.
-
 
 Contributing
 ------------
