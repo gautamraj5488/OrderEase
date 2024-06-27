@@ -47,7 +47,7 @@ To get started with OrderEase on your local machine, follow these steps:
    cd OrderEase
 
 3.   ```sh
-  flutter pub get
+     flutter pub get
 
 4 **Set up Firebase**
 
