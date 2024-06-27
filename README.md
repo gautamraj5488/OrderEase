@@ -43,9 +43,9 @@ Installation
 
 To get started with OrderEase on your local machine, follow these steps:
 
-1.  shCopy codegit clone https://github.com/your-username/OrderEase.gitcd OrderEase
+1.  sh Copy code git clone https://github.com/gautamraj5488/OrderEase
 
-2.  shCopy codeflutter pub get
+2.  sh Copy code flutter pub get
 
 3.  **Set up Firebase**
 
@@ -53,7 +53,7 @@ To get started with OrderEase on your local machine, follow these steps:
 
     *   Place your google-services.json (for Android) and GoogleService-Info.plist (for iOS) files in the appropriate directories.
 
-4.  shCopy codeflutter run
+4.  sh Copy codeflutter run
 
 
 Usage
@@ -78,10 +78,6 @@ OrderEase relies on several dependencies to function properly:
 
 *   **fluttertoast**: Flutter plugin for displaying toast notifications.
 
-
-Ensure these dependencies are added to your pubspec.yaml file:
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   yamlCopy codedependencies:    flutter:      sdk: flutter    firebase_core: ^1.10.6    cloud_firestore: ^3.1.6    firebase_auth: ^4.5.6    provider: ^6.1.1    fluttertoast: ^9.2.0   `
 
 Contributing
 ------------
