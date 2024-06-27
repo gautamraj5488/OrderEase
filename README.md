@@ -35,8 +35,6 @@ Features
 
 *   **Intuitive UI**: User-friendly interface with smooth navigation and responsive design.
 
-*   **Offline Support**: Access and manage menu data even without an internet connection.
-
 
 Installation
 ------------
@@ -45,17 +43,19 @@ To get started with OrderEase on your local machine, follow these steps:
 
 1.  ```sh
     git clone https://github.com/gautamraj5488/OrderEase
+2. ```sh
+   cd OrderEase
 
-2.  ```sh
+3 ```sh
     flutter pub get
 
-3.  **Set up Firebase**
+4 **Set up Firebase**
 
     *   Follow Firebase setup instructions to add Firebase to your Flutter project.
 
     *   Place your google-services.json (for Android) and GoogleService-Info.plist (for iOS) files in the appropriate directories.
 
-4.  ```sh
+5 ```sh
     flutter run
 
 
