@@ -43,9 +43,11 @@ Installation
 
 To get started with OrderEase on your local machine, follow these steps:
 
-1.  sh Copy code git clone https://github.com/gautamraj5488/OrderEase
+1.  ```sh
+    git clone https://github.com/gautamraj5488/OrderEase
 
-2.  sh Copy code flutter pub get
+2.  ```sh
+    flutter pub get
 
 3.  **Set up Firebase**
 
@@ -53,7 +55,8 @@ To get started with OrderEase on your local machine, follow these steps:
 
     *   Place your google-services.json (for Android) and GoogleService-Info.plist (for iOS) files in the appropriate directories.
 
-4.  sh Copy codeflutter run
+4.  ```sh
+    flutter run
 
 
 Usage
