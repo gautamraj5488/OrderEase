@@ -49,13 +49,13 @@ To get started with OrderEase on your local machine, follow these steps:
 3.   ```sh
      flutter pub get
 
-4 **Set up Firebase**
+4. **Set up Firebase**
 
     *   Follow Firebase setup instructions to add Firebase to your Flutter project.
 
     *   Place your google-services.json (for Android) and GoogleService-Info.plist (for iOS) files in the appropriate directories.
 
-5 ```sh
+5.  ```sh
     flutter run
 
 
