@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:dms/features/social_media/screens/profile/profile_page.dart';
 import 'package:dms/utils/helpers/helper_fuctions.dart';
 import 'package:dms/utils/theme/custom_theme/text_theme.dart';
 

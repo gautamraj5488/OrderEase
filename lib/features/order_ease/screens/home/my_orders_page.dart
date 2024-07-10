@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
+import '../../../../utils/constants/colors.dart';
 import 'order_details_page.dart';
 
 class MyOrdersPage extends StatefulWidget {
@@ -16,26 +17,41 @@ class MyOrdersPage extends StatefulWidget {
 }
 
 class _MyOrdersPageState extends State<MyOrdersPage> {
+
+  Color _getStatusColorButton(String status) {
+    switch (status) {
+      case 'Order Accepted':
+        return SMAColors.info.withOpacity(0.1);
+      case 'Preparing':
+        return SMAColors.warning.withOpacity(0.1);
+      case 'Completed':
+        return SMAColors.success.withOpacity(0.1);
+      default:
+        return Colors.grey.withOpacity(0.1);
+    }
+  }
+
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Order Accepted':
-        return Colors.green;
-      case 'Preparing your order':
-        return Colors.blue;
-      case 'Ready':
-        return Colors.purple;
+        return SMAColors.info;
+      case 'Preparing':
+        return SMAColors.warning;
+      case 'Completed':
+        return SMAColors.success;
       default:
         return Colors.grey;
     }
   }
+  
 
   int _getStepIndex(String status) {
     switch (status) {
       case 'Order Accepted':
         return 0;
-      case 'Preparing your order':
+      case 'Preparing':
         return 1;
-      case 'Ready':
+      case 'Completed':
         return 2;
       default:
         return 0; // Default to the first step if status is unknown
@@ -157,6 +173,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 ),
                 child: Card(
                   child: ExpansionTile(
+                    backgroundColor: _getStatusColorButton(order['status'] ?? 'Unknown'),
                     title: Text(
                       'Order ID: ${order.id}',
                       style: TextStyle(color: _getStatusColor(status)),

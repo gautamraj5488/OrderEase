@@ -465,10 +465,13 @@
 //
 //
 
+import 'package:dms/features/authentication/screens/login/helper/email_helper.dart';
+import 'package:dms/utils/helpers/helper_fuctions.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../../common/widgets/appbar/appbar.dart';
 import 'my_orders_page.dart';
 
 class CartPage extends StatefulWidget {
@@ -539,10 +542,10 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    bool dark = SMAHelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: SMAAppBar(
         title: Text('Cart'),
       ),
       body: StreamBuilder<DocumentSnapshot>(
@@ -607,7 +610,7 @@ class _CartPageState extends State<CartPage> {
                   children: [
                     if (selectedCoupon.isNotEmpty)
                       Container(
-                        color: darkMode ? Colors.black87 : Colors.white,
+                        color: dark ? Colors.black87 : Colors.white,
                         padding: EdgeInsets.all(10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -774,7 +777,7 @@ class _CartPageState extends State<CartPage> {
   void _showPaymentOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      //isScrollControlled: true,
       builder: (BuildContext context) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.9,
@@ -787,20 +790,6 @@ class _CartPageState extends State<CartPage> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
-              ListTile(
-                leading: Icon(Icons.credit_card),
-                title: Text('Credit Card'),
-                onTap: () {
-                  _processPayment(context, 'Credit Card');
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.credit_card),
-                title: Text('Debit Card'),
-                onTap: () {
-                  _processPayment(context, 'Debit Card');
-                },
-              ),
               ListTile(
                 leading: Icon(Icons.account_balance_wallet),
                 title: Text('UPI'),
@@ -816,11 +805,14 @@ class _CartPageState extends State<CartPage> {
                 },
               ),
               Spacer(),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Cancel'),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel'),
+                ),
               ),
             ],
           ),
@@ -830,46 +822,71 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _processPayment(BuildContext context, String paymentMethod) async {
-    Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Processing $paymentMethod payment...')),
-    );
-
-    DocumentSnapshot cartSnapshot =
-    await _firestore.collection('users').doc(widget.userId).get();
-
-    if (!cartSnapshot.exists) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Cart is empty. No order placed.')),
-      );
-      return;
-    }
-
-    Map<String, dynamic> userData = cartSnapshot.data() as Map<String, dynamic>;
-    List cartItems = userData['cart'] ?? [];
-    int totalBill = calculateDiscountedTotal();
-
-    Map<String, dynamic> orderData = {
-      'userId': widget.userId,
-      'shopId': widget.shopId,
-      'items': cartItems,
-      'totalBill': totalBill,
-      'tableNumber': selectedTableNumber ?? 'Not selected',
-      'paymentMethod': paymentMethod,
-      'status': 'Order Accepted',
-      'estimatedWaitTime': '14 minutes', // Example estimated time
-      'createdAt': Timestamp.now(),
-    };
-
     try {
-      await FirebaseFirestore.instance.collection('orders').add(orderData);
+      // Close the payment dialog
+      Navigator.pop(context);
+
+      // Show a snackbar indicating payment processing
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Processing $paymentMethod payment...')),
+      );
+
+      // Fetch user details
+      DocumentSnapshot userSnapshot = await _firestore.collection('users').doc(widget.userId).get();
+
+      // Check if user details exist
+      if (!userSnapshot.exists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User details not found. Unable to place order.')),
+        );
+        return;
+      }
+
+      // Extract email and name from user data
+      String email = userSnapshot.get('email');
+      String name = userSnapshot.get('firstName'); // Assuming 'firstName' field exists
+
+      // Fetch cart details
+      DocumentSnapshot cartSnapshot = await _firestore.collection('users').doc(widget.userId).get();
+
+      // Check if cart exists
+      if (!cartSnapshot.exists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Cart is empty. No order placed.')),
+        );
+        return;
+      }
+
+      Map<String, dynamic> userData = cartSnapshot.data() as Map<String, dynamic>;
+      List cartItems = userData['cart'] ?? [];
+      int totalBill = calculateDiscountedTotal();
+
+      // Prepare order data
+      Map<String, dynamic> orderData = {
+        'userId': widget.userId,
+        'shopId': widget.shopId,
+        'items': cartItems,
+        'totalBill': totalBill,
+        'tableNumber': selectedTableNumber ?? 'Not selected',
+        'paymentMethod': paymentMethod,
+        'status': 'Order Accepted',
+        'estimatedWaitTime': '14 minutes', // Example estimated time
+        'createdAt': Timestamp.now(),
+      };
+
+      // Add order to Firestore
+      DocumentReference orderRef = await FirebaseFirestore.instance.collection('orders').add(orderData);
+      String orderId = orderRef.id;
+      await orderRef.update({'orderId': orderId});
+
+      // Clear user's cart after placing order
       await _firestore.collection('users').doc(widget.userId).update({'cart': []});
 
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Order placed successfully.')),
-      );
+      // Send order placed email
+      EmailHelper.sendOrderPlacedEmail(email, name, orderId);
 
+
+      // Navigate to MyOrdersPage
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MyOrdersPage(userId: widget.userId)),
@@ -881,4 +898,5 @@ class _CartPageState extends State<CartPage> {
       );
     }
   }
+
 }

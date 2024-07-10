@@ -6,11 +6,9 @@ import 'package:dms/utils/constants/colors.dart';
 import 'package:dms/utils/helpers/helper_fuctions.dart';
 import 'common/widgets/appbar/appbar.dart';
 import 'features/authentication/screens/login/helper/email_helper.dart';
-import 'features/social_media/screens/home/create_post.dart';
-import 'features/social_media/screens/home/home.dart';
-import 'features/social_media/screens/home/my_orders_page.dart';
-import 'features/social_media/screens/profile/profile_page.dart';
-import 'features/social_media/screens/search/search_screen.dart';
+import 'features/order_ease/screens/home/home.dart';
+import 'features/order_ease/screens/profile/profile_page.dart';
+
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});

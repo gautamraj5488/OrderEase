@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dms/features/social_media/screens/profile/profile_page.dart';
+import 'package:dms/features/order_ease/screens/profile/user_profile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dms/common/widgets/appbar/appbar.dart';
-import 'package:dms/features/social_media/screens/profile/user_profile_widget.dart';
 import '../../../../services/firestore.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
